@@ -4,7 +4,7 @@
     <nav class="navbar is-spaced">
       <div class="container">
         <div class="navbar-brand">
-          <a class="navbar-item"><img src="@/assets/logo.svg"></a>
+          <a class="navbar-item"><img src="@/assets/avatar2.png"></a>
           <a class="navbar-burger burger" :class="{'is-active': open}" @click="open = !open">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
