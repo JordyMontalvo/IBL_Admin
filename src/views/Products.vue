@@ -18,6 +18,7 @@
                 <th>Código</th>
                 <th>Nombre</th>
                 <th>Categoría</th>
+                <th>Descripción</th>
                 <th>Precios Compra</th>
                 <th>Puntos</th>
                 <th>Imágen</th>
@@ -59,6 +60,17 @@
                     v-if="product.edit"
                   />
                 </td>
+
+                <td>
+                  <span v-if="!product.edit">{{ product.description }}</span>
+                  <textarea
+                    class="textarea"
+                    placeholder="Descripción"
+                    style="max-width: 220px"
+                    v-model="product._description"
+                    v-if="product.edit"
+                  ></textarea>
+                </td>
                 <!-- Precio Producto -->
                 <td>
                   <span v-if="!product.edit">{{ product.price }}</span>
@@ -85,7 +97,8 @@
                 </td>
                 <!-- Imágen Producto -->
                 <td>
-                  <small v-if="!product.edit">{{ product.img }}</small>
+                  <!-- <small v-if="!product.edit">{{ product.img }}</small> -->
+                  <small v-if="!product.edit"><a :href="product.img" target="_blank">link</a></small>
                   <input
                     class="input"
                     placeholder="Imágen"
@@ -95,6 +108,9 @@
                   />
                 </td>
                 <!-- Edit Options -->
+                <td v-if="product.edit">
+                  <button @click="remove(product)">Eliminar</button>
+                </td>
                 <td>
                   <i
                     class="fa-regular fa-pen-to-square"
@@ -251,10 +267,24 @@ export default {
         _code: '',
         _name: '',
         _type: '',
+        _description: '',
         _price: 0,
         _points: 0,
         _img: '',
       }))
+    },
+
+    async remove(product) {
+
+      if (!confirm('¿Está seguro de eliminar este producto?')) {
+        return
+      }
+      await api.products.POST({
+        action: 'delete',
+        id: product.id
+      })
+
+      location.reload()
     },
 
     edit(product) {
@@ -263,6 +293,7 @@ export default {
       product._code = product.code
       product._name = product.name
       product._type = product.type
+      product._description = product.description
       product._price = product.price
       product._points = product.points
       product._img = product.img
@@ -274,8 +305,9 @@ export default {
         id: product.id,
         data: {
           _code: product._code,
-          _name: product._name,
+          _name: product._name, 
           _type: product._type,
+          _description: product._description,
           _price: product._price,
           _points: product._points,
           _img: product._img,
@@ -285,6 +317,7 @@ export default {
       product.code = product._code
       product.name = product._name
       product.type = product._type
+      product.description = product._description
       product.price = product._price
       product.points = product._points
       product.img = product._img
@@ -297,7 +330,7 @@ export default {
     },
 
     async add() {
-      const { code, name, type, price, points } = this.new_product
+      const { code, name, type, price, points, description } = this.new_product
 
       await api.products.POST({
         action: 'add',
@@ -307,6 +340,7 @@ export default {
           type,
           price,
           points,
+          description,
         },
       })
 
