@@ -23,12 +23,19 @@ import Closed       from './views/Closed.vue'
 
 // import Reports      from './views/Reports.vue'
 
+import Sales        from './views/Sales.vue'
+
 Vue.use(Router)
 
 const routes = [
   {
     path: '*',
     redirect: '/login'
+  },
+  {
+    path: '/sales/:filter',
+    component: Sales,
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',

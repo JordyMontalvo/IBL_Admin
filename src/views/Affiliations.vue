@@ -182,8 +182,8 @@ export default {
       if(val == 2) return '3'
     },
     date(val) {
-      return new Date(val).toLocaleDateString()
-      // return new Date(val).toLocaleString()
+      // return new Date(val).toLocaleDateString()
+      return new Date(val).toLocaleString()
     },
   },
   beforeRouteUpdate(to, from, next) {
