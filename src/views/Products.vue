@@ -10,67 +10,116 @@
       </div>
 
       <div class="container">
+        <div class="tabs is-boxed">
+          <ul>
+            <li :class="{ 'is-active': activeTab === 'ACTIVACIÓN' }">
+              <a @click="activeTab = 'ACTIVACIÓN'">Activaciones</a>
+            </li>
+            <li :class="{ 'is-active': activeTab === 'TERRENO' }">
+              <a @click="activeTab = 'TERRENO'">Terrenos</a>
+            </li>
+            <li :class="{ 'is-active': activeTab === 'MEMBRESÍA' }">
+              <a @click="activeTab = 'MEMBRESÍA'">Membresías</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+
+      <div class="container">
         <div class="table-container">
           <table class="table">
             <thead>
               <tr>
-                <th>#</th>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Categoría</th>
-                <th>Descripción</th>
-                <th>Precios Compra</th>
-                <th>Puntos</th>
                 <th>Imágen</th>
+                <th>Titulo</th>
+                <th>SubTitulo</th>
+                <!-- Field specific depending on tab -->
+                <th v-if="activeTab === 'ACTIVACIÓN'">Duración</th>
+                <th v-if="activeTab === 'TERRENO'">Área</th>
+                <th v-if="activeTab === 'TERRENO' || activeTab === 'MEMBRESÍA'">Ubicación</th>
+                
+                <th>Precio</th>
+                <th>Tipo</th>
+                <th>Puntos</th>
+                <th>Código</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(product, i) in products" :key="i">
-                <th>{{ i + 1 }}</th>
-                <!-- Código -->
+              <tr v-for="(product, i) in filteredProducts" :key="i">
+                <!-- Imágen Producto -->
                 <td>
-                  <span v-if="!product.edit">{{ product.code }}</span>
+                  <small v-if="!product.edit"><a :href="product.img" target="_blank" v-if="product.img">Ver</a></small>
                   <input
                     class="input"
-                    placeholder="Código"
-                    style="max-width: 220px"
-                    v-model="product._code"
+                    placeholder="URL Imágen"
+                    style="max-width: 150px"
+                    v-model="product._img"
                     v-if="product.edit"
                   />
                 </td>
-                <!-- Nombre Producto -->
+                
+                <!-- Titulo (Nombre) -->
                 <td>
                   <span v-if="!product.edit">{{ product.name }}</span>
                   <input
                     class="input"
-                    placeholder="Nombre"
-                    style="max-width: 220px"
+                    placeholder="Titulo"
+                    style="max-width: 150px"
                     v-model="product._name"
                     v-if="product.edit"
                   />
                 </td>
-                <!-- Categoría Producto -->
-                <td style="width: 200px">
-                  <span v-if="!product.edit">{{ product.type }}</span>
+
+                <!-- SubTitulo -->
+                <td>
+                  <span v-if="!product.edit">{{ product.subtitle }}</span>
                   <input
                     class="input"
-                    placeholder="Categoría"
-                    style="max-width: 220px"
-                    v-model="product._type"
+                    placeholder="SubTitulo"
+                    style="max-width: 150px"
+                    v-model="product._subtitle"
                     v-if="product.edit"
                   />
                 </td>
 
-                <td>
-                  <span v-if="!product.edit">{{ product.description }}</span>
-                  <textarea
-                    class="textarea"
-                    placeholder="Descripción"
-                    style="max-width: 220px"
-                    v-model="product._description"
+                <!-- Duración (Solo Activación) -->
+                <td v-if="activeTab === 'ACTIVACIÓN'">
+                  <span v-if="!product.edit">{{ product.duration }}</span>
+                  <input
+                    class="input"
+                    placeholder="Duración"
+                    style="max-width: 100px"
+                    v-model="product._duration"
                     v-if="product.edit"
-                  ></textarea>
+                  />
                 </td>
+
+                <!-- Área (Solo Terreno) -->
+                <td v-if="activeTab === 'TERRENO'">
+                  <span v-if="!product.edit">{{ product.area }}</span>
+                  <input
+                    class="input"
+                    placeholder="Área"
+                    style="max-width: 100px"
+                    v-model="product._area"
+                    v-if="product.edit"
+                  />
+                </td>
+
+                <!-- Ubicación (Terreno y Membresía) -->
+                <td v-if="activeTab === 'TERRENO' || activeTab === 'MEMBRESÍA'">
+                  <span v-if="!product.edit">{{ product.location }}</span>
+                  <input
+                    class="input"
+                    placeholder="Ubicación"
+                    style="max-width: 150px"
+                    v-model="product._location"
+                    v-if="product.edit"
+                  />
+                </td>
+
                 <!-- Precio Producto -->
                 <td>
                   <span v-if="!product.edit">{{ product.price }}</span>
@@ -78,11 +127,25 @@
                     <input
                       class="input"
                       type="number"
+                      placeholder="Precio"
                       style="max-width: 80px"
                       v-model.number="product._price"
                     />
                   </div>
                 </td>
+
+                <!-- Tipo (Categoría) -->
+                <td>
+                  <span v-if="!product.edit">{{ product.type }}</span>
+                  <input
+                    class="input"
+                    placeholder="Tipo"
+                    style="max-width: 100px"
+                    v-model="product._type"
+                    v-if="product.edit"
+                  />
+                </td>
+
                 <!-- Puntos Producto -->
                 <td>
                   <span v-if="!product.edit">{{ product.points }}</span>
@@ -90,23 +153,26 @@
                     <input
                       class="input"
                       type="number"
+                      placeholder="Puntos"
                       style="max-width: 80px"
                       v-model.number="product._points"
                     />
                   </div>
                 </td>
-                <!-- Imágen Producto -->
+
+                <!-- Código -->
                 <td>
-                  <!-- <small v-if="!product.edit">{{ product.img }}</small> -->
-                  <small v-if="!product.edit"><a :href="product.img" target="_blank">link</a></small>
+                  <span v-if="!product.edit">{{ product.code }}</span>
                   <input
                     class="input"
-                    placeholder="Imágen"
-                    style="max-width: 220px"
-                    v-model="product._img"
+                    placeholder="Código"
+                    style="max-width: 100px"
+                    v-model="product._code"
                     v-if="product.edit"
                   />
                 </td>
+
+
                 <!-- Edit Options -->
                 <td v-if="product.edit">
                   <button @click="remove(product)">Eliminar</button>
@@ -149,56 +215,106 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Categoría</th>
-                <th>Precios Compra</th>
+                <th>Imágen (URL)</th>
+                <th>Titulo</th>
+                <th>SubTitulo</th>
+                <th v-if="activeTab === 'ACTIVACIÓN'">Duración</th>
+                <th v-if="activeTab === 'TERRENO'">Área</th>
+                <th v-if="activeTab === 'TERRENO' || activeTab === 'MEMBRESÍA'">Ubicación</th>
+                <th>Precio</th>
+                <th>Tipo</th>
                 <th>Puntos</th>
+                <th>Acción</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <!-- Código Producto -->
+              <tr>
+                <!-- Imagen -->
                 <td>
-                  <input
+                   <input
                     class="input"
-                    placeholder="Código"
-                    style="max-width: 220px"
-                    v-model="new_product.code"
+                    placeholder="URL"
+                    style="max-width: 150px"
+                    v-model="new_product.img"
                   />
                 </td>
-                <!-- Nombre Producto -->
+                <!-- Titulo -->
                 <td>
                   <input
                     class="input"
-                    placeholder="Nombre"
-                    style="max-width: 220px"
+                    placeholder="Titulo"
+                    style="max-width: 150px"
                     v-model="new_product.name"
                   />
                 </td>
-                <!-- Categoría -->
+                <!-- Subtitulo -->
                 <td>
                   <input
                     class="input"
-                    placeholder="Categoría"
-                    style="max-width: 220px"
-                    v-model="new_product.type"
+                    placeholder="Subtitulo"
+                    style="max-width: 150px"
+                    v-model="new_product.subtitle"
                   />
                 </td>
-                <!-- Precio Compra -->
+                
+                <!-- Duración -->
+                <td v-if="activeTab === 'ACTIVACIÓN'">
+                  <input
+                    class="input"
+                    placeholder="Duración"
+                    style="max-width: 100px"
+                    v-model="new_product.duration"
+                  />
+                </td>
+
+                <!-- Área -->
+                <td v-if="activeTab === 'TERRENO'">
+                  <input
+                    class="input"
+                    placeholder="Área"
+                    style="max-width: 100px"
+                    v-model="new_product.area"
+                  />
+                </td>
+
+                <!-- Ubicación -->
+                <td v-if="activeTab === 'TERRENO' || activeTab === 'MEMBRESÍA'">
+                  <input
+                    class="input"
+                    placeholder="Ubicación"
+                    style="max-width: 150px"
+                    v-model="new_product.location"
+                  />
+                </td>
+
+                <!-- Precio -->
                 <td>
                   <input
                     class="input"
                     type="number"
+                    placeholder="Precio"
                     style="max-width: 80px"
                     v-model.number="new_product.price"
                   />
                 </td>
+
+                <!-- Tipo -->
+                <td>
+                   <input
+                    class="input"
+                    placeholder="Tipo"
+                    style="max-width: 100px"
+                    v-model="new_product.type"
+                  />
+                </td>
+
                 <!-- Puntos -->
                 <td>
                   <input
                     class="input"
                     type="number"
+                    placeholder="Puntos"
                     style="max-width: 80px"
                     v-model.number="new_product.points"
                   />
@@ -228,12 +344,39 @@ export default {
   components: { Layout },
   data() {
     return {
+      activeTab: 'ACTIVACIÓN',
       loading: false,
       products: [],
       new_product: {
         price: [],
         aff_price: [],
+        name: '',
+        subtitle: '',
+        duration: '',
+        area: '',
+        location: '',
+        type: 'ACTIVACIÓN', 
+        points: 0,
+        img: '',
+        code: ''
       },
+    }
+  },
+  watch: {
+    activeTab(val) {
+      if(val) this.new_product.type = val;
+    }
+  },
+  computed: {
+    filteredProducts() {
+      if (!this.products) return []
+      return this.products.filter(p => {
+        // Simple mapping to match the tabs with possible data variations
+        if (this.activeTab === 'ACTIVACIÓN') return p.type.toUpperCase().includes('ACTIVACIÓN') || p.type.toUpperCase().includes('ACTIVACION')
+        if (this.activeTab === 'TERRENO') return p.type.toUpperCase() === 'TERRENO'
+        if (this.activeTab === 'MEMBRESÍA') return p.type.toUpperCase().includes('MEMBRESÍA') || p.type.toUpperCase().includes('MEMBRESIA')
+        return false
+      })
     }
   },
   filters: {
@@ -268,6 +411,10 @@ export default {
         _name: '',
         _type: '',
         _description: '',
+        _subtitle: '',
+        _duration: '',
+        _area: '',
+        _location: '',
         _price: 0,
         _points: 0,
         _img: '',
@@ -294,6 +441,10 @@ export default {
       product._name = product.name
       product._type = product.type
       product._description = product.description
+      product._subtitle = product.subtitle
+      product._duration = product.duration
+      product._area = product.area
+      product._location = product.location
       product._price = product.price
       product._points = product.points
       product._img = product.img
@@ -308,6 +459,10 @@ export default {
           _name: product._name, 
           _type: product._type,
           _description: product._description,
+          _subtitle: product._subtitle,
+          _duration: product._duration,
+          _area: product._area,
+          _location: product._location,
           _price: product._price,
           _points: product._points,
           _img: product._img,
@@ -318,6 +473,10 @@ export default {
       product.name = product._name
       product.type = product._type
       product.description = product._description
+      product.subtitle = product._subtitle
+      product.duration = product._duration
+      product.area = product._area
+      product.location = product._location
       product.price = product._price
       product.points = product._points
       product.img = product._img
@@ -330,17 +489,27 @@ export default {
     },
 
     async add() {
-      const { code, name, type, price, points, description } = this.new_product
+      const { code, name, type, price, points, description, img, subtitle, duration, area, location } = this.new_product
 
+      // Generate a code if not present, though typically user might want to enter it. 
+      // The prompt didn't ask for a code field in the "A) B) C)" lists, effectively removing it from the requirement? 
+      // But the table has it. I'll rely on the input or just send what we have. 
+      // The backend uses a random ID if not provided, but here 'code' is passed.
+      
       await api.products.POST({
         action: 'add',
         data: {
-          code,
+          code: code || Math.random().toString(36).substring(7), // fallback if needed
           name,
           type,
           price,
           points,
           description,
+          img,
+          subtitle,
+          duration,
+          area,
+          location
         },
       })
 
