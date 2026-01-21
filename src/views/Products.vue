@@ -229,7 +229,6 @@
             </thead>
             <tbody>
               <tr>
-              <tr>
                 <!-- Imagen -->
                 <td>
                    <input
