@@ -58,10 +58,11 @@
               <td>{{ sale.points }} pts</td>
               <td>
                  <div v-if="sale.buyer">
-                    <p><strong>{{ sale.buyer.name }} {{ sale.buyer.lastName }}</strong></p>
+                    <p><strong>{{ sale.buyer.name }}</strong></p>
                     <small>DNI: {{ sale.buyer.dni }}</small><br>
-                    <small>{{ sale.buyer.phone }}</small><br>
-                    <small>{{ sale.buyer.address }}</small>
+                    <small>Celular: {{ sale.buyer.phone }}</small><br>
+                    <small>Correo: {{ sale.buyer.email }}</small><br>
+                    <small>Dirección: {{ sale.buyer.address }}</small>
                  </div>
                  <div v-else>
                    <small>Sin datos de comprador</small>
