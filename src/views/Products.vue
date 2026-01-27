@@ -400,10 +400,9 @@ export default {
 
       this.loading = false
 
-      this.products = data.products.map((el) => (el.code = el.id))
-
       this.products = data.products.map((p) => ({
         ...p,
+        code: p.id,
         sending: false,
         edit: false,
         _code: '',
@@ -468,6 +467,7 @@ export default {
         },
       })
 
+      product.id = product._code
       product.code = product._code
       product.name = product._name
       product.type = product._type
