@@ -61,7 +61,16 @@
                   <div v-for="product in activation.products" v-if="product.total">
                     {{ product.total }} {{ product.name }}
                   </div>
-
+                  
+                  <!-- Visual Indicators for Type -->
+                  <div style="margin-top: 5px;">
+                     <span class="tag is-info is-light" v-if="activation.products.some(p => p.type === 'MEMBRESIA' || p.name.includes('MEMBRESIA') || p.name.includes('Membresía'))" style="margin-right: 5px; font-size: 0.7rem;">
+                       <i class="fas fa-id-card"></i>&nbsp;Membresía
+                     </span>
+                     <span class="tag is-warning is-light" v-if="activation.products.some(p => p.type === 'TERRENO' || p.type === 'LOTE' || p.name.includes('LOTE') || p.name.includes('Lote'))" style="font-size: 0.7rem;">
+                       <i class="fas fa-map-marked-alt"></i>&nbsp;Lote
+                     </span>
+                  </div>
                 </td>
                 <td>
                   S/. {{ activation.price }} <br>
