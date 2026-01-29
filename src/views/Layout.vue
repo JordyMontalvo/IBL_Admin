@@ -21,13 +21,7 @@
               <a class="navbar-item" href="/users/activated">Activados</a>
             </div>
           </div>
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">Afiliación</a>
-            <div class="navbar-dropdown">
-              <a class="navbar-item" href="/affiliations/all">Todas</a>
-              <a class="navbar-item" href="/affiliations/pending">Pendientes</a>
-            </div>
-          </div>
+
             <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">Activación</a>
             <div class="navbar-dropdown">
