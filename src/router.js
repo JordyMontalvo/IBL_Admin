@@ -1,29 +1,31 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Login        from './views/Login.vue'
-import Sucursal     from './views/Sucursal.vue'
-import Logout       from './views/Logout.vue'
-import Users        from './views/Users.vue'
+import Login from './views/Login.vue'
+import Sucursal from './views/Sucursal.vue'
+import Logout from './views/Logout.vue'
+import Users from './views/Users.vue'
 import Affiliations from './views/Affiliations.vue'
-import Collects     from './views/Collects.vue'
-import OfficeCollects     from './views/OfficeCollects.vue'
-import Activations  from './views/Activations.vue'
+import Collects from './views/Collects.vue'
+import OfficeCollects from './views/OfficeCollects.vue'
+import Activations from './views/Activations.vue'
 // import Promos       from './views/Promos.vue'
-import Banner       from './views/Banner.vue'
-import Tree         from './views/Tree.vue'
-import Stock        from './views/Stock.vue'
-import Offices      from './views/Offices.vue'
-import Operations   from './views/Operations.vue'
-import Pay          from './views/Pay.vue'
-import Wallet       from './views/Wallet.vue'
-import Products     from './views/Products.vue'
-import Kadex        from './views/Kadex.vue'
-import Closed       from './views/Closed.vue'
+import Banner from './views/Banner.vue'
+import Tree from './views/Tree.vue'
+import Stock from './views/Stock.vue'
+import Offices from './views/Offices.vue'
+import Operations from './views/Operations.vue'
+import Pay from './views/Pay.vue'
+import Wallet from './views/Wallet.vue'
+import Products from './views/Products.vue'
+import Kadex from './views/Kadex.vue'
+import Closed from './views/Closed.vue'
 
 // import Reports      from './views/Reports.vue'
 
-import Sales        from './views/Sales.vue'
+import Sales from './views/Sales.vue'
+import Bono from './views/Bono.vue'
+import BonoDetail from './views/BonoDetail.vue'
 
 Vue.use(Router)
 
@@ -133,11 +135,16 @@ const routes = [
     component: Closed,
     meta: { requiresAuth: true }
   },
-  // {
-  //   path: '/reports',
-  //   component: Reports,
-  //   meta: { requiresAuth: true }
-  // },
+  {
+    path: '/bono',
+    component: Bono,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/bono/:id',
+    component: BonoDetail,
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = new Router({
@@ -149,12 +156,12 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
 
   const requiresNoAuth = to.matched.some(record => record.meta.requiresNoAuth)
-  const requiresAuth   = to.matched.some(record => record.meta.requiresAuth)
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
   const session = localStorage.getItem('session')
 
-  if (requiresNoAuth &&  session) { next({ path: '/affiliations/all' }) }
-  if (requiresAuth   && !session) { next({ path: '/login' }) }
+  if (requiresNoAuth && session) { next({ path: '/affiliations/all' }) }
+  if (requiresAuth && !session) { next({ path: '/login' }) }
 
   next()
 })

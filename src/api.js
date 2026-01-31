@@ -4,29 +4,30 @@ axios.defaults.baseURL = process.env.VUE_APP_SERVER + '/api'
 
 
 class API {
-  constructor({ users, affiliations, Collects, OfficeCollects, activations, products, kadex, closeds, promos, promo, pay, wallet, Tree, offices, stock, sales }) {
-    this.users        = users
+  constructor({ users, affiliations, Collects, OfficeCollects, activations, products, kadex, closeds, promos, promo, pay, wallet, Tree, offices, stock, sales, bono }) {
+    this.users = users
     this.affiliations = affiliations
-    this.Collects     = Collects
+    this.Collects = Collects
     this.OfficeCollects = OfficeCollects
-    this.activations  = activations
-    this.products     = products
-    this.kadex        = kadex
-    this.closeds      = closeds
-    this.promos       = promos
-    this.promo        = promo
-    this.pay          = pay
-    this.wallet       = wallet
-    this.Tree         = Tree
-    this.offices      = offices
-    this.stock        = stock
-    this.sales        = sales
+    this.activations = activations
+    this.products = products
+    this.kadex = kadex
+    this.closeds = closeds
+    this.promos = promos
+    this.promo = promo
+    this.pay = pay
+    this.wallet = wallet
+    this.Tree = Tree
+    this.offices = offices
+    this.stock = stock
+    this.sales = sales
+    this.bono = bono
   }
 }
 
 class Users {
   GET({ filter }) {
-    return axios.get (`/admin/users?filter=${filter}`)
+    return axios.get(`/admin/users?filter=${filter}`)
   }
   POST({ action, id, data }) {
     return axios.post(`/admin/users`, { action, id, data })
@@ -35,7 +36,7 @@ class Users {
 
 class Affiliations {
   GET({ filter, account }) {
-    return axios.get (`/admin/affiliations?filter=${filter}&&account=${account}`)
+    return axios.get(`/admin/affiliations?filter=${filter}&&account=${account}`)
   }
   POST({ action, id }) {
     return axios.post(`/admin/affiliations`, { action, id })
@@ -44,7 +45,7 @@ class Affiliations {
 
 class Collects {
   GET({ filter, account }) {
-    return axios.get (`/admin/collects?filter=${filter}&&account=${account}`)
+    return axios.get(`/admin/collects?filter=${filter}&&account=${account}`)
   }
   POST({ action, id }) {
     return axios.post(`/admin/collects`, { action, id })
@@ -53,7 +54,7 @@ class Collects {
 
 class OfficeCollects {
   GET({ filter, account }) {
-    return axios.get (`/admin/office-collects?filter=${filter}&&account=${account}`)
+    return axios.get(`/admin/office-collects?filter=${filter}&&account=${account}`)
   }
   POST({ action, id }) {
     return axios.post(`/admin/office-collects`, { action, id })
@@ -62,7 +63,7 @@ class OfficeCollects {
 
 class Activations {
   GET({ filter, account }) {
-    return axios.get (`/admin/activations?filter=${filter}&&account=${account}`)
+    return axios.get(`/admin/activations?filter=${filter}&&account=${account}`)
   }
   POST({ action, id, points }) {
     return axios.post(`/admin/activations`, { action, id, points })
@@ -71,7 +72,7 @@ class Activations {
 
 class Products {
   GET() {
-    return axios.get (`/admin/products`)
+    return axios.get(`/admin/products`)
   }
   POST({ action, id, data }) {
     return axios.post(`/admin/products`, { action, id, data })
@@ -80,7 +81,7 @@ class Products {
 
 class Kadex {
   GET() {
-    return axios.get (`/admin/kadex`)
+    return axios.get(`/admin/kadex`)
   }
   POST({ action, id, data }) {
     return axios.post(`/admin/kadex`, { action, id, data })
@@ -89,7 +90,7 @@ class Kadex {
 
 class Closeds {
   GET() {
-    return axios.get (`/admin/closeds`)
+    return axios.get(`/admin/closeds`)
   }
   POST({ action, id, data }) {
     return axios.post(`/admin/closeds`, { action, id, data })
@@ -98,7 +99,7 @@ class Closeds {
 
 class Promos {
   GET() {
-    return axios.get (`/admin/promos`)
+    return axios.get(`/admin/promos`)
   }
   POST({ id, img, pos }) {
     return axios.post(`/admin/promos`, { id, img, pos })
@@ -113,7 +114,7 @@ class Promo {
 
 class Pay {
   GET() {
-    return axios.get (`/admin/pay`)
+    return axios.get(`/admin/pay`)
   }
   POST({ dni, amount, desc }) {
     return axios.post(`/admin/pay`, { dni, amount, desc })
@@ -122,13 +123,13 @@ class Pay {
 
 class Wallet {
   GET() {
-    return axios.get (`/admin/wallet`)
+    return axios.get(`/admin/wallet`)
   }
 }
 
 class Tree {
   GET() {
-    return axios.get (`/admin/tree`)
+    return axios.get(`/admin/tree`)
   }
   POST({ to, from }) {
     return axios.post(`/admin/tree`, { to, from })
@@ -137,7 +138,7 @@ class Tree {
 
 class Stock {
   GET({ id }) {
-    return axios.get (`/admin/stock?id=${id}`)
+    return axios.get(`/admin/stock?id=${id}`)
   }
   POST({ id, amount }) {
     return axios.post(`/admin/stock`, { id, amount })
@@ -146,16 +147,22 @@ class Stock {
 
 class Offices {
   GET() {
-    return axios.get (`/admin/offices`)
+    return axios.get(`/admin/offices`)
   }
   POST({ id, products, office }) {
     return axios.post(`/admin/offices`, { id, products, office })
   }
 }
 
+class Bono {
+  GET({ id } = {}) {
+    return axios.get(`/admin/bono${id ? `?id=${id}` : ''}`)
+  }
+}
+
 class Sales {
   GET({ filter, type }) {
-    return axios.get (`/admin/sales?filter=${filter}&type=${type}`)
+    return axios.get(`/admin/sales?filter=${filter}&type=${type}`)
   }
   POST({ action, id, type }) {
     return axios.post(`/admin/sales`, { action, id, type })
@@ -163,20 +170,21 @@ class Sales {
 }
 
 export default new API({
-  users:        new Users(),
+  users: new Users(),
   affiliations: new Affiliations(),
-  Collects:     new Collects(),
+  Collects: new Collects(),
   OfficeCollects: new OfficeCollects(),
-  activations:  new Activations(),
-  products:     new Products(),
-  kadex:        new Kadex(),
-  closeds:      new Closeds(),
-  promos:       new Promos(),
-  promo:        new Promo(),
-  pay:          new Pay(),
-  wallet:       new Wallet(),
-  Tree:         new Tree(),
-  offices:      new Offices(),
-  stock:        new Stock(),
-  sales:        new Sales(),
+  activations: new Activations(),
+  products: new Products(),
+  kadex: new Kadex(),
+  closeds: new Closeds(),
+  promos: new Promos(),
+  promo: new Promo(),
+  pay: new Pay(),
+  wallet: new Wallet(),
+  Tree: new Tree(),
+  offices: new Offices(),
+  stock: new Stock(),
+  sales: new Sales(),
+  bono: new Bono(),
 })
