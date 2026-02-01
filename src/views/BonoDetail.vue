@@ -41,6 +41,7 @@
             <div class="progress-markers">
               <div class="marker" style="left: 10%;"><span>1</span></div>
               <div class="marker" style="left: 40%;"><span>4</span></div>
+              <div class="marker" style="left: 70%;"><span>7</span></div>
               <div class="marker" style="left: 100%;"><span>10</span></div>
             </div>
           </div>
@@ -66,10 +67,12 @@
                   </div>
                 </td>
                 <td>
-                  {{ m.status === 'completed' ? m.lots + (m.lots === 1 ? ' Lote' : ' Lotes') : 'Pendiente' }}
+                  {{ detail.accumulatedLots }} / {{ m.lots }}
                 </td>
                 <td>
-                  {{ m.status === 'completed' ? m.prize : 'No calificó' }}
+                  <span :class="m.status === 'completed' ? 'has-text-success has-text-weight-bold' : 'has-text-grey'">
+                    {{ m.status === 'completed' ? m.prize : 'No calificado' }}
+                  </span>
                 </td>
                 <td class="has-text-centered">
                   <div class="is-flex is-justify-content-center gap-2">
