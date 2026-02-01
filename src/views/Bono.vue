@@ -11,13 +11,19 @@
               <strong>Bono Constructor</strong>
             </div>
             <div class="level-right">
-              <div class="select">
-                <select v-model="selectedClosure">
-                  <option :value="null">Cierre Actual (En curso)</option>
-                  <option v-for="closure in closures" :key="closure.id" :value="closure.id">
-                    Cierre {{ closure.date | dateMonth }}
-                  </option>
-                </select>
+              <div class="is-flex is-align-items-center">
+                <button class="button is-link is-light is-small mr-3" @click="$router.push('/bono-premios')">
+                  <span class="icon is-small"><i class="fas fa-gift"></i></span>
+                  <span>PREMIOS OTORGADOS</span>
+                </button>
+                <div class="select is-small">
+                  <select v-model="selectedClosure">
+                    <option :value="null">Cierre Actual (En curso)</option>
+                    <option v-for="closure in closures" :key="closure.id" :value="closure.id">
+                      Cierre {{ closure.date | dateMonth }}
+                    </option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -115,6 +121,9 @@ export default {
 <style scoped>
 .mt-4 {
   margin-top: 1.5rem;
+}
+.mr-3 {
+  margin-right: 0.75rem;
 }
 .table thead th {
   background-color: #f5f7fa;

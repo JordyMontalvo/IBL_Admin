@@ -26,6 +26,7 @@ import Closed from './views/Closed.vue'
 import Sales from './views/Sales.vue'
 import Bono from './views/Bono.vue'
 import BonoDetail from './views/BonoDetail.vue'
+import PremiosOtorgados from './views/PremiosOtorgados.vue'
 
 Vue.use(Router)
 
@@ -143,6 +144,11 @@ const routes = [
   {
     path: '/bono/:id',
     component: BonoDetail,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/bono-premios',
+    component: PremiosOtorgados,
     meta: { requiresAuth: true }
   },
 ]

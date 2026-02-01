@@ -158,6 +158,12 @@ class Bono {
   GET({ id } = {}) {
     return axios.get(`/admin/bono${id ? `?id=${id}` : ''}`)
   }
+  GET_PREMIOS(params) {
+    return axios.get(`/admin/bono-premios`, { params })
+  }
+  POST_PREMIO(data) {
+    return axios.post(`/admin/bono-premios`, data)
+  }
 }
 
 class Sales {
