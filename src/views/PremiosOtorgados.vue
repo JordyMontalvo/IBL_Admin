@@ -352,6 +352,10 @@ export default {
   color: #1a3b5d !important;
 }
 
+.fa-medal, .fa-trophy {
+  transform: translateY(3px);
+}
+
 .overflow-hidden {
   overflow: hidden;
 }

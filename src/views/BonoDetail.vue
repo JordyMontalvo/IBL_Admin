@@ -306,4 +306,8 @@ export default {
 .breadcrumb a:hover {
   color: #1a3b5d !important;
 }
+
+.fa-trophy {
+  transform: translateY(3px);
+}
 </style>
