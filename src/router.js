@@ -20,6 +20,8 @@ import Wallet from './views/Wallet.vue'
 import Products from './views/Products.vue'
 import Kadex from './views/Kadex.vue'
 import Closed from './views/Closed.vue'
+import ManageActivations from './views/ManageActivations.vue'
+import ManageMemberships from './views/ManageMemberships.vue'
 
 // import Reports      from './views/Reports.vue'
 
@@ -129,6 +131,16 @@ const routes = [
   {
     path: '/kadex',
     component: Kadex,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/manage-activations',
+    component: ManageActivations,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/manage-memberships',
+    component: ManageMemberships,
     meta: { requiresAuth: true }
   },
   {

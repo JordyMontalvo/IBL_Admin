@@ -44,7 +44,14 @@
             </div>
           </div>
 
-          <a class="navbar-item" href="/products">Productos</a>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">Productos</a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item" href="/manage-activations">Activaciones</a>
+              <a class="navbar-item" href="/manage-memberships">Membresías</a>
+              <a class="navbar-item" href="/products">Productos (Legacy)</a>
+            </div>
+          </div>
           <a class="navbar-item" href="/kadex">Inventario</a>
 
           <!-- <div class="navbar-item has-dropdown is-hoverable">
