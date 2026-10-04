@@ -265,6 +265,10 @@ export default {
         return
       }
 
+      if (!confirm('¿Seguro que deseas guardar los cambios?')) {
+        return
+      }
+
       this.loading = true
       let action = this.currentItem.id ? 'edit' : 'add'
       
