@@ -29,6 +29,7 @@ import Sales from './views/Sales.vue'
 import Bono from './views/Bono.vue'
 import BonoDetail from './views/BonoDetail.vue'
 import PremiosOtorgados from './views/PremiosOtorgados.vue'
+import Commissions from './views/Commissions.vue'
 
 Vue.use(Router)
 
@@ -161,6 +162,11 @@ const routes = [
   {
     path: '/bono-premios',
     component: PremiosOtorgados,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/commissions',
+    component: Commissions,
     meta: { requiresAuth: true }
   },
 ]

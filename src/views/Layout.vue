@@ -49,7 +49,6 @@
             <div class="navbar-dropdown">
               <a class="navbar-item" href="/manage-activations">Activaciones</a>
               <a class="navbar-item" href="/manage-memberships">Membresías</a>
-              <a class="navbar-item" href="/products">Productos (Legacy)</a>
             </div>
           </div>
           <a class="navbar-item" href="/kadex">Inventario</a>
@@ -71,6 +70,7 @@
             <div class="navbar-dropdown">
               <a class="navbar-item" href="/pay">Pagar</a>
               <a class="navbar-item" href="/wallet">Billetera</a>
+              <a class="navbar-item" href="/commissions" v-if="account.type == 'admin'">Comisiones</a>
             </div>
           </div>
 

@@ -175,6 +175,15 @@ class Sales {
   }
 }
 
+class Commissions {
+  GET() {
+    return axios.get('/admin/commissions')
+  }
+  POST({ percentages }) {
+    return axios.post('/admin/commissions', { percentages })
+  }
+}
+
 export default new API({
   users: new Users(),
   affiliations: new Affiliations(),
@@ -193,4 +202,5 @@ export default new API({
   stock: new Stock(),
   sales: new Sales(),
   bono: new Bono(),
+  commissions: new Commissions(),
 })
