@@ -64,10 +64,10 @@
                   
                   <!-- Visual Indicators for Type -->
                   <div style="margin-top: 5px;">
-                     <span class="tag is-info is-light" v-if="activation.products.some(p => p.type === 'MEMBRESIA' || p.name.includes('MEMBRESIA') || p.name.includes('Membresía'))" style="margin-right: 5px; font-size: 0.7rem;">
+                     <span class="tag is-info is-light" v-if="activation.products && activation.products.some(p => p.type === 'MEMBRESIA' || (p.name && (p.name.includes('MEMBRESIA') || p.name.includes('Membresía'))))" style="margin-right: 5px; font-size: 0.7rem;">
                        <i class="fas fa-id-card"></i>&nbsp;Membresía
                      </span>
-                     <span class="tag is-warning is-light" v-if="activation.products.some(p => p.type === 'TERRENO' || p.type === 'LOTE' || p.name.includes('LOTE') || p.name.includes('Lote'))" style="font-size: 0.7rem;">
+                     <span class="tag is-warning is-light" v-if="activation.products && activation.products.some(p => p.type === 'TERRENO' || p.type === 'LOTE' || (p.name && (p.name.includes('LOTE') || p.name.includes('Lote'))))" style="font-size: 0.7rem;">
                        <i class="fas fa-map-marked-alt"></i>&nbsp;Lote
                      </span>
                   </div>
@@ -247,7 +247,7 @@ export default {
 
       // error
       if(data.error && data.msg == 'already approved')  return activation.status = 'approved'
-      if(data.error && data.msg == 'already rejected')  return affiliation.status = 'rejected'
+      if(data.error && data.msg == 'already rejected')  return activation.status = 'rejected'
 
       // success
       activation.status = 'approved'
@@ -317,7 +317,7 @@ export default {
       const { data } = await api.activations.POST({ action: 'check', id: activation.id })
     },
     async uncheck(activation){
-      if(affiliation.delivered) return
+      if(activation.delivered) return
       // console.log('uncheck', { activation })
       activation.delivered = false
 
