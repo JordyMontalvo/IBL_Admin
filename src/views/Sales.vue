@@ -7,17 +7,6 @@
     </div>
 
     <div class="container">
-      <div class="tabs is-boxed">
-        <ul>
-          <li :class="{ 'is-active': activeTab === 'LOTE' }">
-            <a @click="setTab('LOTE')">Lote</a>
-          </li>
-          <li :class="{ 'is-active': activeTab === 'MEMBRESÍA' }">
-            <a @click="setTab('MEMBRESÍA')">Membresía</a>
-          </li>
-        </ul>
-      </div>
-
       <div class="notification is-warning" v-if="loading">
         Cargando ventas...
       </div>
@@ -106,7 +95,7 @@ export default {
   components: { Layout },
   data() {
     return {
-      activeTab: 'LOTE',
+      activeTab: 'MEMBRESÍA',
       loading: false,
       sales: []
     }
