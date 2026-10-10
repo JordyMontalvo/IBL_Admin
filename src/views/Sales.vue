@@ -58,9 +58,18 @@
                  </div>
               </td>
               <td>
-                <a :href="sale.voucher" target="_blank" v-if="sale.voucher">
-                   <img :src="sale.voucher" style="max-height: 50px;">
-                </a>
+                <div v-if="sale.voucher || sale.voucher2">
+                  <div style="display: flex; gap: 6px; align-items: center;">
+                    <a :href="sale.voucher" target="_blank" v-if="sale.voucher">
+                       <img :src="sale.voucher" style="max-height: 50px;">
+                    </a>
+                    <a :href="sale.voucher2" target="_blank" v-if="sale.voucher2">
+                       <img :src="sale.voucher2" style="max-height: 50px;">
+                    </a>
+                  </div>
+                  <small v-if="sale.voucher_number">Núm: {{ sale.voucher_number }}</small>
+                  <small v-if="sale.voucher_number2"><br>Núm 2: {{ sale.voucher_number2 }}</small>
+                </div>
                 <span v-else>-</span>
               </td>
               <td>

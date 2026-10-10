@@ -88,12 +88,18 @@
                     <small>Nombre: {{ activation.bank }}</small> <br>
                     <small>Fecha: {{ activation.voucher_date }}</small> <br>
                     <small>Núm: {{ activation.voucher_number }}</small>
+                    <small v-if="activation.voucher_number2"><br>Núm 2: {{ activation.voucher_number2 }}</small>
                   </div>
                 </td>
                 <td>
-                  <a :href="activation.voucher" target="_blank">
-                    <img :src="activation.voucher" style="max-height: 80px; max-width: 80px">
-                  </a>
+                  <div style="display: flex; gap: 6px; align-items: center;">
+                    <a :href="activation.voucher" target="_blank" v-if="activation.voucher">
+                      <img :src="activation.voucher" style="max-height: 80px; max-width: 80px">
+                    </a>
+                    <a :href="activation.voucher2" target="_blank" v-if="activation.voucher2">
+                      <img :src="activation.voucher2" style="max-height: 80px; max-width: 80px">
+                    </a>
+                  </div>
                 </td>
                 <td>
                   <div v-if="activation.amounts">
@@ -391,7 +397,9 @@ export default {
               'NOMBRE BANCO': a.bank,
               'FECHA VOUCHER ': a.voucher_date ? new Date(a.voucher_date).toLocaleDateString() : '',
               'NUMERO DE VOUCHER ': a.voucher_number,
+              'NUMERO DE VOUCHER 2': a.voucher_number2,
               'VOUCHER': a.voucher,
+              'VOUCHER 2': a.voucher2,
 
               'TOTAL APORTE': cash + pay,
 
