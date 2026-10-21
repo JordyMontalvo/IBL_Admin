@@ -30,7 +30,7 @@
             </div>
           </div>
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">Ventas</a>
+            <a class="navbar-link">Membresías</a>
             <div class="navbar-dropdown">
               <a class="navbar-item" href="/sales/all">Todas</a>
               <a class="navbar-item" href="/sales/pending">Pendientes</a>
@@ -71,6 +71,7 @@
               <a class="navbar-item" href="/pay">Pagar</a>
               <a class="navbar-item" href="/wallet">Billetera</a>
               <a class="navbar-item" href="/commissions" v-if="account.type == 'admin'">Comisiones</a>
+              <a class="navbar-item" href="/banks" v-if="account.type == 'admin'">Bancos</a>
             </div>
           </div>
 

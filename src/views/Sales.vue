@@ -2,7 +2,7 @@
   <Layout>
     <div class="notification" style="margin-bottom: 0">
       <div class="container">
-        <strong>Ventas</strong>
+        <strong>Membresías</strong>
       </div>
     </div>
 

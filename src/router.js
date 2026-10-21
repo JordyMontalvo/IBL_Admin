@@ -30,6 +30,7 @@ import Bono from './views/Bono.vue'
 import BonoDetail from './views/BonoDetail.vue'
 import PremiosOtorgados from './views/PremiosOtorgados.vue'
 import Commissions from './views/Commissions.vue'
+import Banks from './views/Banks.vue'
 
 Vue.use(Router)
 
@@ -167,6 +168,11 @@ const routes = [
   {
     path: '/commissions',
     component: Commissions,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/banks',
+    component: Banks,
     meta: { requiresAuth: true }
   },
 ]
