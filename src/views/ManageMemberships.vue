@@ -205,6 +205,7 @@ export default {
   data() {
     return {
       loading: false,
+      saving: false,
       products: [],
       isEditing: false,
       currentItem: this.getDefaultItem()
@@ -260,6 +261,8 @@ export default {
       this.isEditing = true
     },
     async saveItem() {
+      if (this.saving) return
+
       if (!this.currentItem.name || this.currentItem.price === '' || !this.currentItem.img) {
         alert("Por favor complete los campos obligatorios (*)")
         return
@@ -269,42 +272,62 @@ export default {
         return
       }
 
+      this.saving = true
       this.loading = true
-      let action = this.currentItem.id ? 'edit' : 'add'
-      
-      let payload = {
-        name: this.currentItem.name,
-        price: this.currentItem.price,
-        active: this.currentItem.active,
-        order: this.currentItem.order,
-        tag: this.currentItem.tag,
-        title: this.currentItem.title,
-        subtitle: this.currentItem.subtitle,
-        benefits: this.currentItem.benefits,
-        type: 'MEMBRESÍA',
-        img: this.currentItem.img,
-        code: this.currentItem.id || Math.random().toString(36).substring(7)
+      try {
+        let action = this.currentItem.id ? 'edit' : 'add'
+        
+        let payload = {
+          name: this.currentItem.name,
+          price: this.currentItem.price,
+          active: this.currentItem.active,
+          order: this.currentItem.order,
+          tag: this.currentItem.tag,
+          title: this.currentItem.title,
+          subtitle: this.currentItem.subtitle,
+          benefits: this.currentItem.benefits,
+          type: 'MEMBRESÍA',
+          img: this.currentItem.img,
+          code: this.currentItem.id || Math.random().toString(36).substring(7)
+        }
+
+        const { data } = await api.products.POST({
+          action: action,
+          id: this.currentItem.id,
+          data: payload
+        })
+
+        if (data && data.error) {
+          alert(data.msg || 'Error al guardar la membresía')
+          return
+        }
+
+        await this.GET()
+        this.isEditing = false
+      } finally {
+        this.loading = false
+        this.saving = false
       }
-
-      await api.products.POST({
-        action: action,
-        id: this.currentItem.id,
-        data: payload
-      })
-
-      await this.GET()
-      this.isEditing = false
-      this.loading = false
     },
     async removeItem(item) {
+      if (this.saving) return
       if (!confirm('¿Está seguro de eliminar esta membresía?')) return
+      this.saving = true
       this.loading = true
-      await api.products.POST({
-        action: 'delete',
-        id: item.id
-      })
-      await this.GET()
-      this.loading = false
+      try {
+        const { data } = await api.products.POST({
+          action: 'delete',
+          id: item.id
+        })
+        if (data && data.error) {
+          alert(data.msg || 'Error al eliminar la membresía')
+          return
+        }
+        await this.GET()
+      } finally {
+        this.loading = false
+        this.saving = false
+      }
     },
     cancelEdit() {
       this.isEditing = false
