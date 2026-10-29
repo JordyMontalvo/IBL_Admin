@@ -67,13 +67,16 @@
                 <span class="tag" :class="{
                   'is-warning': sale.status == 'pending',
                   'is-success': sale.status == 'approved',
-                  'is-danger': sale.status == 'rejected'
+                  'is-danger': sale.status == 'rejected' || sale.status == 'annulled'
                 }">{{ sale.status | status }}</span>
               </td>
               <td>
                 <div class="buttons" v-if="sale.status == 'pending'">
                   <button class="button is-small is-success" @click="approve(sale)">Aprobar</button>
                   <button class="button is-small is-danger" @click="reject(sale)">Rechazar</button>
+                </div>
+                <div class="buttons" v-if="sale.status == 'approved'">
+                  <button class="button is-small is-danger is-light" @click="annul(sale)">Anular</button>
                 </div>
               </td>
             </tr>
@@ -109,6 +112,7 @@ export default {
       if (val == 'pending') return 'Pendiente'
       if (val == 'approved') return 'Aprobado'
       if (val == 'rejected') return 'Rechazado'
+      if (val == 'annulled') return 'Anulado'
       return val
     }
   },
@@ -157,6 +161,23 @@ export default {
         id: sale.id,
         type: sale.sourceType
       })
+      this.fetchSales()
+    },
+    async annul(sale) {
+      const reason = prompt('Motivo de la anulación (se revertirán las comisiones pagadas):')
+      if (reason === null) return
+      if (!confirm('¿Anular esta venta y revertir sus comisiones? No se puede deshacer.')) return
+
+      const { data } = await api.sales.POST({
+        action: 'annul',
+        id: sale.id,
+        type: sale.sourceType,
+        reason
+      })
+      if (data && data.error) {
+        alert(data.msg)
+        return
+      }
       this.fetchSales()
     },
     async reject(sale) {

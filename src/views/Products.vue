@@ -345,6 +345,7 @@ export default {
     return {
       activeTab: 'ACTIVACIÓN',
       loading: false,
+      saving: false,
       products: [],
       new_product: {
         price: [],
@@ -420,16 +421,24 @@ export default {
     },
 
     async remove(product) {
-
+      if (this.saving) return
       if (!confirm('¿Está seguro de eliminar este producto?')) {
         return
       }
-      await api.products.POST({
-        action: 'delete',
-        id: product.id
-      })
-
-      location.reload()
+      this.saving = true
+      try {
+        const { data } = await api.products.POST({
+          action: 'delete',
+          id: product.id
+        })
+        if (data && data.error) {
+          alert(data.msg || 'Error al eliminar el producto')
+          return
+        }
+        location.reload()
+      } finally {
+        this.saving = false
+      }
     },
 
     edit(product) {
@@ -449,38 +458,49 @@ export default {
     },
 
     async save(product) {
-      await api.products.POST({
-        action: 'edit',
-        id: product.id,
-        data: {
-          _code: product._code,
-          _name: product._name, 
-          _type: product._type,
-          _description: product._description,
-          _subtitle: product._subtitle,
-          _duration: product._duration,
-          _area: product._area,
-          _location: product._location,
-          _price: product._price,
-          _points: product._points,
-          _img: product._img,
-        },
-      })
+      if (this.saving) return
+      this.saving = true
+      try {
+        const { data } = await api.products.POST({
+          action: 'edit',
+          id: product.id,
+          data: {
+            _code: product._code,
+            _name: product._name, 
+            _type: product._type,
+            _description: product._description,
+            _subtitle: product._subtitle,
+            _duration: product._duration,
+            _area: product._area,
+            _location: product._location,
+            _price: product._price,
+            _points: product._points,
+            _img: product._img,
+          },
+        })
 
-      product.id = product._code
-      product.code = product._code
-      product.name = product._name
-      product.type = product._type
-      product.description = product._description
-      product.subtitle = product._subtitle
-      product.duration = product._duration
-      product.area = product._area
-      product.location = product._location
-      product.price = product._price
-      product.points = product._points
-      product.img = product._img
+        if (data && data.error) {
+          alert(data.msg || 'Error al guardar el producto')
+          return
+        }
 
-      product.edit = false
+        product.id = product._code
+        product.code = product._code
+        product.name = product._name
+        product.type = product._type
+        product.description = product._description
+        product.subtitle = product._subtitle
+        product.duration = product._duration
+        product.area = product._area
+        product.location = product._location
+        product.price = product._price
+        product.points = product._points
+        product.img = product._img
+
+        product.edit = false
+      } finally {
+        this.saving = false
+      }
     },
 
     cancel(product) {
@@ -488,31 +508,42 @@ export default {
     },
 
     async add() {
-      const { code, name, type, price, points, description, img, subtitle, duration, area, location } = this.new_product
+      if (this.saving) return
+      this.saving = true
+      try {
+        const { code, name, type, price, points, description, img, subtitle, duration, area, location } = this.new_product
 
-      // Generate a code if not present, though typically user might want to enter it. 
-      // The prompt didn't ask for a code field in the "A) B) C)" lists, effectively removing it from the requirement? 
-      // But the table has it. I'll rely on the input or just send what we have. 
-      // The backend uses a random ID if not provided, but here 'code' is passed.
-      
-      await api.products.POST({
-        action: 'add',
-        data: {
-          code: code || Math.random().toString(36).substring(7), // fallback if needed
-          name,
-          type,
-          price,
-          points,
-          description,
-          img,
-          subtitle,
-          duration,
-          area,
-          location
-        },
-      })
+        // Generate a code if not present, though typically user might want to enter it. 
+        // The prompt didn't ask for a code field in the "A) B) C)" lists, effectively removing it from the requirement? 
+        // But the table has it. I'll rely on the input or just send what we have. 
+        // The backend uses a random ID if not provided, but here 'code' is passed.
+        
+        const { data } = await api.products.POST({
+          action: 'add',
+          data: {
+            code: code || Math.random().toString(36).substring(7), // fallback if needed
+            name,
+            type,
+            price,
+            points,
+            description,
+            img,
+            subtitle,
+            duration,
+            area,
+            location
+          },
+        })
 
-      location.reload()
+        if (data && data.error) {
+          alert(data.msg || 'Error al agregar el producto')
+          return
+        }
+
+        location.reload()
+      } finally {
+        this.saving = false
+      }
     },
   },
 }
