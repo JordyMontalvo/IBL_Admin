@@ -145,10 +145,18 @@ export default {
     }
   },
   async created() {
-    const { data } = await api.projects.GET()
-    this.loading = false
-    if (data.error) return this.error = data.msg
-    this.projects = data.projects
+    const account = JSON.parse(localStorage.getItem('session'))
+    this.$store.commit('SET_ACCOUNT', account)
+
+    try {
+      const { data } = await api.projects.GET()
+      if (data.error) this.error = data.msg
+      else this.projects = data.projects || []
+    } catch (e) {
+      this.error = 'No se pudieron cargar los proyectos.'
+    } finally {
+      this.loading = false
+    }
   },
   methods: {
     openNew() {
