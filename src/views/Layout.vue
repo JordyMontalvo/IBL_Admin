@@ -62,6 +62,7 @@
           </div> -->
           <a class="navbar-item" href="/banner" v-if="account.type == 'admin'">Banner</a>
           <a class="navbar-item" href="/tree" v-if="account.type == 'admin'">Red</a>
+          <a class="navbar-item" href="/projects" v-if="account.type == 'admin'">Proyectos</a>
           
           <!-- <a class="navbar-item" href="/pay">Pagar</a>
           <a class="navbar-item" href="/wallet">Billetera</a> -->
