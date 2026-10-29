@@ -201,8 +201,8 @@ class Projects {
   GET() {
     return axios.get('/admin/projects')
   }
-  POST({ action, id, name, location, pdf, fileName }) {
-    return axios.post('/admin/projects', { action, id, name, location, pdf, fileName })
+  POST(body) {
+    return axios.post('/admin/projects', body)
   }
 }
 

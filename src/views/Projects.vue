@@ -77,7 +77,7 @@
               </div>
             </div>
             <div class="field">
-              <label class="label">Mapa (PDF, máx. 8 MB)</label>
+              <label class="label">Mapa (PDF, máx. 4 MB)</label>
               <div class="file has-name is-fullwidth">
                 <label class="file-label">
                   <input class="file-input" type="file" accept="application/pdf,.pdf" @change="pickFile">
@@ -119,7 +119,9 @@
 import Layout from '@/views/Layout.vue'
 import api from '@/api'
 
-const MAX_PDF = 8 * 1024 * 1024
+const MAX_PDF = 4 * 1024 * 1024
+// characters of base64 per request (multiple of 4); Vercel rejects bodies over 4.5 MB
+const PART_SIZE = 2000000
 
 const toBase64 = (file) => new Promise((resolve, reject) => {
   const reader = new FileReader()
@@ -176,7 +178,7 @@ export default {
         return this.form.file = null
       }
       if (file.size > MAX_PDF) {
-        this.formError = 'El PDF no debe superar los 8 MB'
+        this.formError = 'El PDF no debe superar los 4 MB'
         return this.form.file = null
       }
       this.form.file = file
@@ -191,7 +193,21 @@ export default {
       this.formError = null
       try {
         const pdf = await toBase64(file)
-        const { data } = await api.projects.POST({ action: 'add', name, location, pdf, fileName: file.name })
+
+        const start = (await api.projects.POST({ action: 'start', name, location, fileName: file.name })).data
+        if (start.error) return this.formError = start.msg
+
+        try {
+          for (let i = 0, index = 0; i < pdf.length; i += PART_SIZE, index++) {
+            const part = (await api.projects.POST({ action: 'part', id: start.id, index, data: pdf.slice(i, i + PART_SIZE) })).data
+            if (part.error) throw new Error(part.msg)
+          }
+        } catch (e) {
+          await api.projects.POST({ action: 'cancel', id: start.id }).catch(() => {})
+          throw e
+        }
+
+        const { data } = await api.projects.POST({ action: 'finish', id: start.id })
         if (data.error) return this.formError = data.msg
         this.projects = data.projects
         this.showForm = false
